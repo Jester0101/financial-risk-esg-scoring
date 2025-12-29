@@ -58,21 +58,5 @@ risk.enhanced.weight-esg=0.3
 4. Click "Calculate Risk Score"
 5. View results: Z-Score, ESG scores, baseline vs enhanced probabilities
 
-## 🔌 Test Python Service
-
-```bash
-curl -X POST "http://localhost:8000/esg/score" \
-  -H "Content-Type: application/json" \
-  -d '{"text": "sustainability renewable energy governance"}'
-```
-
-## 🐛 Troubleshooting
-
-- **ESG Total shows 0.000**: Check `@JsonProperty` annotations in `EsgScoreResponse.java`
-- **Method Version shows "N/A"**: Verify `@JsonProperty("method_version")` annotation
-- **Connection refused**: Ensure Python service is running on port 8000
-- **Compilation errors**: Run `.\mvnw.cmd clean compile` to check
-
 ---
 
-**Version**: 1.0.0
