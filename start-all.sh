@@ -17,7 +17,13 @@ sleep 3
 
 echo "[2/3] Starting Backend API (Java)..."
 cd backend
-./mvnw spring-boot:run &
+chmod +x mvnw 2>/dev/null || true
+if [ -f "./mvnw" ]; then
+  ./mvnw spring-boot:run &
+else
+  echo "mvnw not found, trying system mvn..."
+  mvn spring-boot:run &
+fi
 BACKEND_PID=$!
 cd ..
 sleep 5
