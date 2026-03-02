@@ -16,7 +16,7 @@ public class Company {
     private String description;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private List<String> assessmentIds; // References to assessments
+    private List<String> assessmentIds;
 
     public Company() {
         this.assessmentIds = new ArrayList<>();

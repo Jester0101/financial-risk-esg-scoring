@@ -99,101 +99,53 @@ public class RiskApiController {
                     esgClient.extractFinancialData(fileContent, filename);
                 
                 if (financialData != null) {
-                    if ("extracted".equals(financialData.getSource()) 
-                        && financialData.getConfidence() != null && financialData.getConfidence() > 0.2) {
-                        
-                        System.out.println("Using extracted financial data (confidence=" + financialData.getConfidence() + ")");
-                        
-                        System.out.println("=== Financial Data Processing ===");
-                        
-                        if (useExtractedFinancial) {
-                            System.out.println("useExtractedFinancial is TRUE - will use extracted data to override manual inputs");
-                            
-                            if (financialData.getX1() != null) {
-                                System.out.println(String.format("Overriding X1: %.6f -> %.6f (manual provided=%s)", 
-                                    input.getX1(), financialData.getX1(), x1Provided));
-                                input.setX1(financialData.getX1());
-                            }
-                            
-                            if (financialData.getX2() != null) {
-                                System.out.println(String.format("Overriding X2: %.6f -> %.6f (manual provided=%s)", 
-                                    input.getX2(), financialData.getX2(), x2Provided));
-                                input.setX2(financialData.getX2());
-                            }
-                            
-                            if (financialData.getX3() != null) {
-                                System.out.println(String.format("Overriding X3: %.6f -> %.6f (manual provided=%s)", 
-                                    input.getX3(), financialData.getX3(), x3Provided));
-                                input.setX3(financialData.getX3());
-                            }
-                            
-                            if (financialData.getX4() != null) {
-                                System.out.println(String.format("Overriding X4: %.6f -> %.6f (manual provided=%s)", 
-                                    input.getX4(), financialData.getX4(), x4Provided));
-                                input.setX4(financialData.getX4());
-                            }
-                            
-                            if (financialData.getX5() != null) {
-                                System.out.println(String.format("Overriding X5: %.6f -> %.6f (manual provided=%s)", 
-                                    input.getX5(), financialData.getX5(), x5Provided));
-                                input.setX5(financialData.getX5());
-                            }
-                        } else {
-                            System.out.println("useExtractedFinancial is FALSE - keeping all manual inputs (ignoring extracted data)");
-                            System.out.println(String.format("Manual inputs: X1=%.6f (provided=%s), X2=%.6f (provided=%s), X3=%.6f (provided=%s), X4=%.6f (provided=%s), X5=%.6f (provided=%s)", 
-                                input.getX1(), x1Provided,
-                                input.getX2(), x2Provided,
-                                input.getX3(), x3Provided,
-                                input.getX4(), x4Provided,
-                                input.getX5(), x5Provided));
-                        }
-                        
-                        System.out.println("=== Processing Complete ===");
-                        System.out.println(String.format("Final values: X1=%.6f, X2=%.6f, X3=%.6f, X4=%.6f, X5=%.6f", 
+                    boolean hasExtracted = "extracted".equals(financialData.getSource());
+                    if (useExtractedFinancial && hasExtracted) {
+                        System.out.println("Using extracted financial data (confidence=" + financialData.getConfidence() + ", useExtractedFinancial=true)");
+                        if (financialData.getX1() != null) { input.setX1(financialData.getX1()); }
+                        if (financialData.getX2() != null) { input.setX2(financialData.getX2()); }
+                        if (financialData.getX3() != null) { input.setX3(financialData.getX3()); }
+                        if (financialData.getX4() != null) { input.setX4(financialData.getX4()); }
+                        if (financialData.getX5() != null) { input.setX5(financialData.getX5()); }
+                        System.out.println(String.format("Final X1-X5: %.4f, %.4f, %.4f, %.4f, %.4f",
                             input.getX1(), input.getX2(), input.getX3(), input.getX4(), input.getX5()));
-                        
-                        int ratiosSet = 0;
-                        if (financialData.getCurrentRatio() != null) {
-                            input.setCurrentRatio(financialData.getCurrentRatio());
-                            ratiosSet++;
-                        }
-                        if (financialData.getDebtToEquity() != null) {
-                            input.setDebtToEquity(financialData.getDebtToEquity());
-                            ratiosSet++;
-                        }
-                        if (financialData.getReturnOnEquity() != null) {
-                            input.setReturnOnEquity(financialData.getReturnOnEquity());
-                            ratiosSet++;
-                        }
-                        if (financialData.getQuickRatio() != null) {
-                            input.setQuickRatio(financialData.getQuickRatio());
-                            ratiosSet++;
-                        }
-                        if (financialData.getEbitdaMargin() != null) {
-                            input.setEbitdaMargin(financialData.getEbitdaMargin());
-                            ratiosSet++;
-                        }
-                        
+                    } else if (!useExtractedFinancial) {
+                        System.out.println("useExtractedFinancial is FALSE - keeping manual inputs");
+                    } else if (!hasExtracted) {
+                        System.out.println(String.format("No financial data extracted (source=%s). Using manual inputs.",
+                            financialData.getSource()));
+                    }
+                    
+                
+                    int ratiosSet = 0;
+                    if (financialData.getCurrentRatio() != null) {
+                        input.setCurrentRatio(financialData.getCurrentRatio());
+                        ratiosSet++;
+                    }
+                    if (financialData.getDebtToEquity() != null) {
+                        input.setDebtToEquity(financialData.getDebtToEquity());
+                        ratiosSet++;
+                    }
+                    if (financialData.getReturnOnEquity() != null) {
+                        input.setReturnOnEquity(financialData.getReturnOnEquity());
+                        ratiosSet++;
+                    }
+                    if (financialData.getQuickRatio() != null) {
+                        input.setQuickRatio(financialData.getQuickRatio());
+                        ratiosSet++;
+                    }
+                    if (financialData.getEbitdaMargin() != null) {
+                        input.setEbitdaMargin(financialData.getEbitdaMargin());
+                        ratiosSet++;
+                    }
+                    if (ratiosSet > 0) {
                         System.out.println(String.format(
-                            "Financial extraction: confidence=%.2f, ratios extracted=%d (currentRatio=%s, debtToEquity=%s, roe=%s, quickRatio=%s, ebitdaMargin=%s)",
-                            financialData.getConfidence(), ratiosSet,
-                            financialData.getCurrentRatio(), financialData.getDebtToEquity(), 
-                            financialData.getReturnOnEquity(), financialData.getQuickRatio(), 
-                            financialData.getEbitdaMargin()
+                            "Additional ratios from extraction: %d set (currentRatio=%s, debtToEquity=%s, roe=%s, quickRatio=%s, ebitdaMargin=%s)",
+                            ratiosSet,
+                            input.getCurrentRatio(), input.getDebtToEquity(), 
+                            input.getReturnOnEquity(), input.getQuickRatio(), 
+                            input.getEbitdaMargin()
                         ));
-                    } else {
-                        if (!useExtractedFinancial) {
-                            System.out.println("Financial extraction available but disabled by user (useExtractedFinancial=false)");
-                            System.out.println(String.format("Using manual inputs: X1=%.6f, X2=%.6f, X3=%.6f, X4=%.6f, X5=%.6f", 
-                                input.getX1(), input.getX2(), input.getX3(), input.getX4(), input.getX5()));
-                        } else {
-                            System.out.println(String.format(
-                                "Financial extraction skipped: source=%s, confidence=%s (threshold=0.2)",
-                                financialData.getSource(), financialData.getConfidence()
-                            ));
-                            System.out.println(String.format("Using manual inputs: X1=%.6f, X2=%.6f, X3=%.6f, X4=%.6f, X5=%.6f", 
-                                input.getX1(), input.getX2(), input.getX3(), input.getX4(), input.getX5()));
-                        }
                     }
                 }
                 
@@ -230,7 +182,7 @@ public class RiskApiController {
                 if (docResponse != null) {
                     RiskResult result = compositeRiskService.calculateWithEsgScore(
                         input,
-                        docResponse.getEsgTotal(),  // Use ESG score from document
+                        docResponse.getEsgTotal(),  
                         docResponse.getMethodVersion(),
                         docResponse.getE(),
                         docResponse.getS(),
@@ -272,6 +224,17 @@ public class RiskApiController {
                         }
                         financialInfo.put("extractionDetails", details);
                         response.put("financialExtraction", financialInfo);
+                    }
+
+                    boolean zScoreExtractionFailed = useExtractedFinancial && (
+                        financialData == null
+                        || !"extracted".equals(financialData.getSource())
+                        || (financialData.getX1() == null && financialData.getX2() == null
+                            && financialData.getX3() == null && financialData.getX4() == null && financialData.getX5() == null)
+                    );
+                    if (zScoreExtractionFailed) {
+                        response.put("zScoreExtractionMessage",
+                            "Financial indicators for Z-Score could not be extracted from the document. Z-Score is based on manual or default values. Please enter the ratios manually or try another file.");
                     }
 
                     if (input.getCompanyName() != null && !input.getCompanyName().trim().isEmpty()) {
@@ -319,10 +282,7 @@ public class RiskApiController {
         }
     }
 
-    /**
-     * Health check endpoint
-     * GET /api/risk/health
-     */
+    
     @GetMapping("/health")
     public ResponseEntity<Map<String, String>> health() {
         Map<String, String> status = new HashMap<>();
@@ -331,9 +291,7 @@ public class RiskApiController {
         return ResponseEntity.ok(status);
     }
 
-    /**
-     * Helper method to save assessment after calculation
-     */
+    
     private void saveAssessment(RiskInput input, RiskResult result, Map<String, Object> responseMetadata) {
         try {
             System.out.println("=== Starting saveAssessment ===");
@@ -411,6 +369,10 @@ public class RiskApiController {
                     finInfo.setExtractionDetails(details);
                 }
                 metadata.setFinancialExtraction(finInfo);
+            }
+
+            if (responseMetadata.containsKey("zScoreExtractionMessage") && responseMetadata.get("zScoreExtractionMessage") != null) {
+                metadata.setZScoreExtractionMessage((String) responseMetadata.get("zScoreExtractionMessage"));
             }
 
             assessment.setMetadata(metadata);

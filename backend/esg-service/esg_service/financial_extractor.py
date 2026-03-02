@@ -27,9 +27,11 @@ def extract_financial_data(
     
     client = OpenAI(api_key=api_key)
     
-    prompt = f"""You are an expert financial analyst specializing in extracting precise financial metrics from Annual Reports for credit risk assessment.
+    prompt = f"""You are an expert financial analyst specializing in extracting precise financial metrics from Annual Reports and Integrated Reports for credit risk assessment.
 
 **TASK:** Extract financial ratios from CONSOLIDATED financial statements for Altman Z-Score calculation and extended financial analysis.
+
+**DOCUMENT TYPES:** The text may be from an Annual Report, Integrated Report, or Sustainability Report. Financial statements can appear under "Financial Statements", "Consolidated Financial Statements", "Financial Review", "Appendix", "Notes to the Financial Statements", or in the second half of the document. Search the ENTIRE text for Statement of Financial Position / Balance Sheet and Income Statement / Statement of Comprehensive Income.
 
 **CRITICAL REQUIREMENTS:**
 1. Use ONLY CONSOLIDATED financial statements (ignore standalone/separate entity statements)
@@ -249,7 +251,7 @@ Return a JSON object with this EXACT structure (no additional text, no markdown,
     for attempt in range(max_retries):
         try:
             response = client.chat.completions.create(
-                model="gpt-4o",  # Using gpt-4o (gpt-4.1 not available, gpt-4o is latest)
+                model="gpt-4o", 
                 messages=[
                     {
                         "role": "system",
@@ -257,18 +259,18 @@ Return a JSON object with this EXACT structure (no additional text, no markdown,
                     },
                     {"role": "user", "content": prompt}
                 ],
-                max_tokens=3000,  # Increased token limit for detailed extraction with additional ratios
-                temperature=0.1,  # Low temperature for accuracy
+                max_tokens=3000, 
+                temperature=0.1,  
                 response_format={"type": "json_object"}
             )
             
             result_text = response.choices[0].message.content.strip()
             
-            # Parse JSON response
+            
             try:
                 result = json.loads(result_text)
                 
-                # Log extraction results for debugging
+                
                 additional_ratios = {
                     'current_ratio': result.get('current_ratio'),
                     'debt_to_equity': result.get('debt_to_equity'),
@@ -324,33 +326,44 @@ def _extract_financial_sections(text: str) -> str:
     financial_keywords = [
         'balance sheet', 'statement of financial position', 'consolidated balance sheet',
         'income statement', 'statement of operations', 'profit and loss', 'consolidated income',
-        'cash flow', 'statement of cash flows', 'consolidated cash flow',
+        'statement of comprehensive income', 'comprehensive income', 'profit and loss account',
+        'cash flow', 'statement of cash flows', 'consolidated cash flow', 'cash flow statement',
         'notes to financial statements', 'notes to consolidated financial statements',
-        'financial statements', 'consolidated financial statements',
-        'total assets', 'total liabilities', 'shareholders equity', 'retained earnings',
-        'revenue', 'sales', 'ebit', 'operating income', 'net income',
-        'current assets', 'current liabilities', 'working capital',
-        'inventory', 'inventories', 'quick ratio', 'acid test',
+        'financial statements', 'consolidated financial statements', 'financial statement',
+        'total assets', 'total liabilities', 'shareholders equity', 'shareholders\' equity',
+        'retained earnings', 'retained deficit', 'accumulated deficit',
+        'revenue', 'sales', 'ebit', 'operating income', 'net income', 'operating profit',
+        'current assets', 'current liabilities', 'working capital', 'net assets',
+        'inventory', 'inventories', 'quick ratio', 'acid test', 'current ratio',
         'debt', 'borrowings', 'total debt', 'long-term debt', 'short-term debt',
-        'ebitda', 'depreciation', 'amortization',
-        'marketable securities', 'accounts receivable', 'trade receivables'
+        'ebitda', 'depreciation', 'amortization', 'total equity', 'equity and liabilities',
+        'marketable securities', 'accounts receivable', 'trade receivables',
+        'integrated report', 'annual report', 'financial review', 'financial highlights',
+        'key financial', 'financial data', 'financial position', 'assets and liabilities',
+        'consolidated statement', 'group financial', 'financial results', 'revenue recognition',
+        'operating result', 'profit for the year', 'net result', 'total equity and liabilities'
     ]
     
     paragraphs = text.split('\n\n')
     financial_paragraphs = []
     
     for para in paragraphs:
+        if len(para.strip()) < 15:
+            continue
         para_lower = para.lower()
         score = sum(1 for kw in financial_keywords if kw in para_lower)
-        
         if score >= 1:
             financial_paragraphs.append(para)
     
     if financial_paragraphs:
-        combined = '\n\n'.join(financial_paragraphs[:100])
-        return combined[:20000]
+        combined = '\n\n'.join(financial_paragraphs[:150])
+        out = combined[:25000]
+        print(f"[Financial Extractor] Found {len(financial_paragraphs)} financial paragraphs, sending {len(out)} chars")
+        return out
     
-    return text[:15000]
+    fallback_len = min(35000, len(text))
+    print(f"[Financial Extractor] No keyword-matched paragraphs, using first {fallback_len} chars of document")
+    return text[:fallback_len]
 
 
 def _normalize_extraction_result(result: Dict) -> Dict[str, Any]:

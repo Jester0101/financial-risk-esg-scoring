@@ -50,6 +50,8 @@ export interface AssessmentResponse {
     confidence: number;
     extractionDetails?: Record<string, any>;
   };
+  /** Shown when document was used but Z-Score inputs could not be extracted (instead of silently showing Z-Score 0). */
+  zScoreExtractionMessage?: string;
 }
 
 export async function calculateRisk(input: RiskInput): Promise<RiskResult> {
@@ -314,6 +316,7 @@ export interface Assessment {
       confidence?: number;
       extractionDetails?: Record<string, any>;
     };
+    zScoreExtractionMessage?: string;
   };
   createdAt?: string;
 }

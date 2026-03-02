@@ -10,12 +10,12 @@ public class RiskResult {
     private double compositeScore;
     private LocalDateTime timestamp;
     private Double pBaseline;
-    private Double pAdjusted;  // PD after extended financial analysis (before ESG)
+    private Double pAdjusted;
     private Double pEnhanced;
     private String esgMethodVersion;
     private String esgTopTerms;
     private String esgRiskFlags;
-    private String zScoreFormulaVersion;  // "Z-Score (Original)", "Z'-Score", "Z''-Score"
+    private String zScoreFormulaVersion;
 
     public RiskResult() {
         this.timestamp = LocalDateTime.now();

@@ -6,9 +6,10 @@ import { TrendingUp, FileText, Link2 } from "lucide-react";
 
 interface ExplanationCardsProps {
   result: RiskResult;
+  zScoreExtractionMessage?: string;
 }
 
-export function ExplanationCards({ result }: ExplanationCardsProps) {
+export function ExplanationCards({ result, zScoreExtractionMessage }: ExplanationCardsProps) {
   const zScore = result.zScore ?? 0;
   const contributions = [
     { name: "X1: Working Capital", value: 0.15, weight: 1.2 },
@@ -29,11 +30,16 @@ export function ExplanationCards({ result }: ExplanationCardsProps) {
         </div>
 
         <div className="space-y-4">
-          <div className="flex items-center justify-between p-4 bg-muted/30 rounded-xl">
-            <span className="text-sm font-medium">Z-Score</span>
-            <span className="text-2xl font-bold">
-              {typeof zScore === 'number' ? zScore.toFixed(2) : "—"}
-            </span>
+          <div className="p-4 bg-muted/30 rounded-xl">
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-sm font-medium">Z-Score</span>
+              <span className="text-2xl font-bold">
+                {zScoreExtractionMessage ? "—" : (typeof zScore === "number" ? zScore.toFixed(2) : "—")}
+              </span>
+            </div>
+            {zScoreExtractionMessage && (
+              <p className="text-sm text-warning mt-2">{zScoreExtractionMessage}</p>
+            )}
           </div>
 
           <div className="p-4 bg-muted/30 rounded-xl">

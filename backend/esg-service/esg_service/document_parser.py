@@ -10,36 +10,48 @@ def parse_pdf(file_content: bytes, use_ocr: bool = True) -> str:
         pdf_file = io.BytesIO(file_content)
         reader = PdfReader(pdf_file)
         text = ""
-        
         for page_num, page in enumerate(reader.pages):
             page_text = page.extract_text()
-            
-            if page_text.strip():
+            if page_text and page_text.strip():
                 text += page_text + "\n"
             elif use_ocr:
                 try:
                     ocr_text = _extract_text_with_ocr(file_content, page_num)
                     if ocr_text:
                         text += ocr_text + "\n"
-                except:
+                except Exception:
                     pass
-        
-        if not text.strip():
+        text_pypdf2 = text.strip()
+
+        text_plumber = ""
+        try:
+            import pdfplumber
+            with pdfplumber.open(io.BytesIO(file_content)) as pdf:
+                for page in pdf.pages:
+                    pt = page.extract_text()
+                    if pt:
+                        text_plumber += pt + "\n"
+            text_plumber = text_plumber.strip()
+        except Exception:
+            pass
+
+        if len(text_plumber) > len(text_pypdf2):
+            text = text_plumber
+            print(f"[Document Parser] Using pdfplumber output ({len(text)} chars)")
+        else:
+            text = text_pypdf2
+
+        if not text:
             try:
-                import pdfplumber
-                pdf_file.seek(0)
-                with pdfplumber.open(pdf_file) as pdf:
-                    for page in pdf.pages:
-                        page_text = page.extract_text()
-                        if page_text:
-                            text += page_text + "\n"
-            except:
+                text = _extract_text_with_ocr_full(file_content)
+                if text:
+                    print(f"[Document Parser] Using OCR output ({len(text)} chars)")
+            except Exception:
                 pass
-        
-        if not text.strip() and use_ocr:
-            text = _extract_text_with_ocr_full(file_content)
-        
-        return text if text.strip() else ""
+
+        if text:
+            print(f"[Document Parser] Extracted {len(text)} characters from PDF")
+        return text if text else ""
     except Exception as e:
         raise ValueError(f"Failed to parse PDF: {str(e)}")
 

@@ -22,11 +22,18 @@ export function ResultsView({ result }: ResultsViewProps) {
         <h2 className="text-3xl font-bold">Risk Assessment</h2>
       </div>
 
-      <RiskSummary result={riskResult} />
+      {result.zScoreExtractionMessage && (
+        <div className="p-4 rounded-apple border border-warning/50 bg-warning/10 text-warning">
+          <p className="font-medium">Z-Score: data not extracted from document</p>
+          <p className="text-sm mt-1 opacity-90">{result.zScoreExtractionMessage}</p>
+        </div>
+      )}
+
+      <RiskSummary result={riskResult} zScoreExtractionMessage={result.zScoreExtractionMessage} />
 
       <ComparisonBlock result={riskResult} />
 
-      <ExplanationCards result={riskResult} />
+      <ExplanationCards result={riskResult} zScoreExtractionMessage={result.zScoreExtractionMessage} />
 
       {result.documentStats && (
         <EvidenceSection

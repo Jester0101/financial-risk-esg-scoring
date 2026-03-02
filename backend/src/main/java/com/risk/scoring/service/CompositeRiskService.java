@@ -40,10 +40,6 @@ public class CompositeRiskService {
         return result;
     }
 
-    /**
-     * Calculate risk with pre-computed ESG score (from document analysis).
-     * This method should be used when ESG score is already calculated from document.
-     */
     public RiskResult calculateWithEsgScore(RiskInput input, double esgTotal, String methodVersion, 
                                            double e, double s, double g, 
                                            java.util.List<String> topTerms, 

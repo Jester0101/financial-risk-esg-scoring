@@ -4,11 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
 public class FinancialExtractionResponse {
-    private Double x1;  // Working Capital / Total Assets
-    private Double x2;  // Retained Earnings / Total Assets
-    private Double x3;  // EBIT / Total Assets
-    private Double x4;  // Market Value Equity / Total Liabilities
-    private Double x5;  // Sales / Total Assets
+    private Double x1;  
+    private Double x2;  
+    private Double x3;  
+    private Double x4;  
+    private Double x5;  
     
     @JsonProperty("current_ratio")
     private Double currentRatio;
@@ -25,8 +25,8 @@ public class FinancialExtractionResponse {
     @JsonProperty("ebitda_margin")
     private Double ebitdaMargin;
     
-    private Double confidence;  // 0.0 to 1.0
-    private String source;  // "extracted" or "not_found"
+    private Double confidence;  
+    private String source;  
     
     @JsonProperty("extraction_details")
     private Map<String, Object> extractionDetails;

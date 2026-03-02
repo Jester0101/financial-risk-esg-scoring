@@ -88,6 +88,7 @@ public class Assessment {
         private DocumentStats documentStats;
         private java.util.Map<String, Object> documentSections;
         private FinancialExtractionInfo financialExtraction;
+        private String zScoreExtractionMessage;
 
         public DocumentStats getDocumentStats() {
             return documentStats;
@@ -111,6 +112,14 @@ public class Assessment {
 
         public void setFinancialExtraction(FinancialExtractionInfo financialExtraction) {
             this.financialExtraction = financialExtraction;
+        }
+
+        public String getZScoreExtractionMessage() {
+            return zScoreExtractionMessage;
+        }
+
+        public void setZScoreExtractionMessage(String zScoreExtractionMessage) {
+            this.zScoreExtractionMessage = zScoreExtractionMessage;
         }
 
         public static class DocumentStats {

@@ -7,6 +7,7 @@ import { format } from "date-fns";
 
 interface RiskSummaryProps {
   result: RiskResult;
+  zScoreExtractionMessage?: string;
 }
 
 function getRiskGrade(probability: number, zScore: number, riskZone: string): {
@@ -90,11 +91,11 @@ function getRiskGrade(probability: number, zScore: number, riskZone: string): {
   };
 }
 
-export function RiskSummary({ result }: RiskSummaryProps) {
+export function RiskSummary({ result, zScoreExtractionMessage }: RiskSummaryProps) {
   const probability = result.pEnhanced || result.compositeScore;
   const zScore = result.zScore ?? 0;
   const riskZone = result.riskZone || "Unknown";
-  
+
   const riskInfo = getRiskGrade(probability, zScore, riskZone);
 
   const zoneColor = riskZone.includes("Distress")

@@ -11,3 +11,7 @@ public interface CompanyRepository extends MongoRepository<Company, String> {
     Optional<Company> findByNameIgnoreCase(String name);
 }
 
+
+
+
+

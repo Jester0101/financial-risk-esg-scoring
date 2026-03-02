@@ -140,8 +140,12 @@ public class EsgClient {
                     .retryWhen(Retry.fixedDelay(1, Duration.ofMillis(500)))
                     .block();
 
-            if (response != null && "extracted".equals(response.getSource())) {
-                logger.info("Financial data extraction successful, confidence: {}", response.getConfidence());
+            if (response != null) {
+                if ("extracted".equals(response.getSource())) {
+                    logger.info("Financial data extraction successful, confidence: {}", response.getConfidence());
+                } else {
+                    logger.info("Financial extraction: source={}, confidence={}", response.getSource(), response.getConfidence());
+                }
                 return response;
             }
         } catch (Exception e) {

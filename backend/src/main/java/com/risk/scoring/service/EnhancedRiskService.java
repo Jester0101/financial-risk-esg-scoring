@@ -110,7 +110,8 @@ public class EnhancedRiskService {
     }
 
     private double computeESGAdjustedProbability(double pBase, double esgScore) {
-        double esg = clamp01(esgScore);
+        double normalized = esgScore > 1.0 ? esgScore / 100.0 : esgScore;
+        double esg = clamp01(normalized);
 
         double k = config.getEsgInfluence();
         double cMax = config.getEsgMaxAdjustment();

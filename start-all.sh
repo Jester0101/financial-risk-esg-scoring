@@ -7,6 +7,9 @@ echo ""
 
 echo "[1/3] Starting ESG Service (Python)..."
 cd backend/esg-service
+if [ -d ".venv" ]; then
+  source .venv/bin/activate
+fi
 uvicorn esg_service.main:app --reload --port 8000 &
 ESG_PID=$!
 cd ../..

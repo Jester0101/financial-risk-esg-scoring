@@ -42,6 +42,7 @@ function AssessPageContent() {
           confidence: assessment.metadata.financialExtraction.confidence || 0,
           extractionDetails: assessment.metadata.financialExtraction.extractionDetails,
         } : undefined,
+        zScoreExtractionMessage: assessment.metadata?.zScoreExtractionMessage,
       };
       
       setResult(assessmentResponse);

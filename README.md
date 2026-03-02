@@ -15,7 +15,7 @@ This application calculates financial risk using:
 
 The system consists of three main components:
 
-- **Frontend**: Next.js 14 (React, TypeScript, Tailwind CSS) - Port 3000
+- **Frontend**: Next.js (React, TypeScript, Tailwind CSS) - Port 3000
 - **Backend API**: Spring Boot 4.0.1 (Java 17) - Port 8080
 - **ESG Service**: FastAPI (Python 3.11) - Port 8000
 - **Database**: MongoDB - Port 27017
@@ -24,11 +24,33 @@ The system consists of three main components:
 
 Before you begin, ensure you have the following installed:
 
-- **Java 17+** - [Download](https://www.oracle.com/java/technologies/downloads/)
-- **Python 3.11** - [Download](https://www.python.org/downloads/)
-- **Node.js 18+** - [Download](https://nodejs.org/)
-- **MongoDB** - [Download](https://www.mongodb.com/try/download/community)
-- **OpenAI API Key** - [Get API Key](https://platform.openai.com/api-keys)
+- **Java 17+** — install **Eclipse Temurin (Adoptium)** from [adoptium.net](https://adoptium.net/). Choose JDK 17 or 21 LTS for your OS.
+- **Python 3.11** — see commands below for your OS.
+- **Node.js 18+** — [Download](https://nodejs.org/)
+- **MongoDB** — [Download](https://www.mongodb.com/try/download/community)
+- **OpenAI API Key** — [Get API Key](https://platform.openai.com/api-keys)
+
+### Installing Python 3.11
+
+**Windows (PowerShell or Command Prompt):**
+```powershell
+winget install Python.Python.3.11
+```
+Or download the installer from [python.org/downloads](https://www.python.org/downloads/release/python-3110/). After install, use:
+```powershell
+py -3.11 -m venv .venv
+.venv\Scripts\activate
+```
+
+**macOS (Terminal):**
+```bash
+brew install python@3.11
+```
+Then use:
+```bash
+python3.11 -m venv .venv
+source .venv/bin/activate
+```
 
 ## Installation & Setup
 
@@ -48,16 +70,17 @@ Install and start MongoDB:
 - Follow installation wizard
 - Start MongoDB service: `net start MongoDB` or run `mongod`
 
-**Linux/Mac:**
+**macOS:**
 ```bash
-# Ubuntu/Debian
-sudo apt-get install mongodb
-
-# macOS
+brew tap mongodb/brew
 brew install mongodb-community
+brew services start mongodb-community
+```
 
-# Start MongoDB
-mongod
+**Linux (Ubuntu/Debian):**
+```bash
+sudo apt-get install -y mongodb-org
+sudo systemctl start mongod
 ```
 
 Verify MongoDB is running:
@@ -65,20 +88,23 @@ Verify MongoDB is running:
 mongosh
 ```
 
-### 3. ESG Service (Python) Setup
+### 3. ESG Service (Python 3.11) Setup
 
 Navigate to the ESG service directory:
 ```bash
 cd backend/esg-service
 ```
 
-Create virtual environment:
-```bash
-# Windows
+Create virtual environment and activate it:
+
+**Windows (PowerShell or CMD):**
+```powershell
 py -3.11 -m venv .venv
 .venv\Scripts\activate
+```
 
-# Linux/Mac
+**macOS / Linux:**
+```bash
 python3.11 -m venv .venv
 source .venv/bin/activate
 ```
@@ -89,15 +115,18 @@ pip install -r requirements.txt
 ```
 
 Set up OpenAI API key:
-```bash
-# Windows
-echo "OPENAI_API_KEY=your-api-key-here" > .env
 
-# Linux/Mac
+**Windows:**
+```powershell
+echo OPENAI_API_KEY=your-api-key-here > .env
+```
+
+**macOS / Linux:**
+```bash
 echo "OPENAI_API_KEY=your-api-key-here" > .env
 ```
 
-**Note:** Copy `.env.example` to `.env` and fill in your actual API key (if example file exists).
+Replace `your-api-key-here` with your key from [platform.openai.com](https://platform.openai.com/api-keys).
 
 Start the service:
 ```bash
@@ -108,27 +137,35 @@ Verify the service is running: http://localhost:8000/docs
 
 ### 4. Backend API (Java) Setup
 
+Use **Java 17+** from [Adoptium (Eclipse Temurin)](https://adoptium.net/). Check with:
+```bash
+java -version
+```
+
 Navigate to backend directory:
 ```bash
 cd backend
 ```
 
 Build and run:
-```bash
-# Windows
-.\mvnw.cmd spring-boot:run
 
-# Linux/Mac
+**Windows:**
+```powershell
+.\mvnw.cmd spring-boot:run
+```
+
+**macOS / Linux:**
+```bash
 ./mvnw spring-boot:run
 ```
 
-Or build first, then run:
+Or build a JAR and run:
 ```bash
 # Windows
 .\mvnw.cmd clean package
 java -jar target/risk-scoring-0.0.1-SNAPSHOT.jar
 
-# Linux/Mac
+# macOS / Linux
 ./mvnw clean package
 java -jar target/risk-scoring-0.0.1-SNAPSHOT.jar
 ```
@@ -148,12 +185,17 @@ npm install
 ```
 
 Create environment file:
-```bash
-# Windows
-echo "NEXT_PUBLIC_API_URL=http://localhost:8080" > .env.local
 
-# Linux/Mac
+**Windows (PowerShell):**
+```powershell
 echo "NEXT_PUBLIC_API_URL=http://localhost:8080" > .env.local
+echo "NEXT_PUBLIC_ESG_SERVICE_URL=http://localhost:8000" >> .env.local
+```
+
+**macOS / Linux:**
+```bash
+echo "NEXT_PUBLIC_API_URL=http://localhost:8080" > .env.local
+echo "NEXT_PUBLIC_ESG_SERVICE_URL=http://localhost:8000" >> .env.local
 ```
 
 Start development server:
@@ -170,7 +212,7 @@ Verify the frontend is running: http://localhost:3000
 start-all.bat
 ```
 
-### Linux/Mac
+### macOS / Linux
 ```bash
 chmod +x start-all.sh
 ./start-all.sh
@@ -184,7 +226,7 @@ Edit `backend/src/main/resources/application.properties`:
 
 ```properties
 server.port=8080
-esg.service.url=http://localhost:8000
+esg.service.base-url=http://localhost:8000
 spring.data.mongodb.uri=mongodb://localhost:27017/risk-scoring
 ```
 
@@ -200,6 +242,7 @@ OPENAI_API_KEY=your-api-key-here
 Create `frontend/.env.local`:
 ```
 NEXT_PUBLIC_API_URL=http://localhost:8080
+NEXT_PUBLIC_ESG_SERVICE_URL=http://localhost:8000
 ```
 
 ## Features
@@ -256,7 +299,7 @@ NEXT_PUBLIC_API_URL=http://localhost:8080
 ## Technology Stack
 
 ### Backend
-- **Java 17**
+- **Java 17+** (Eclipse Temurin / Adoptium recommended)
 - **Spring Boot 4.0.1**
 - **Spring Data MongoDB**
 - **Maven**
@@ -270,7 +313,7 @@ NEXT_PUBLIC_API_URL=http://localhost:8080
 - **python-docx** (DOCX processing)
 
 ### Frontend
-- **Next.js 14**
+- **Next.js**
 - **React 18**
 - **TypeScript**
 - **Tailwind CSS**
@@ -365,9 +408,9 @@ Results include:
 - Review service logs
 
 ### Backend API Errors
-- Verify Java 17+ is installed: `java -version`
-- Check MongoDB connection
-- Ensure ESG service is running
+- Verify Java 17+ is installed (e.g. Adoptium): `java -version`
+- Check MongoDB is running and connection string in `application.properties`
+- Ensure ESG service is running on port 8000
 - Review application logs
 
 ### Frontend Issues
