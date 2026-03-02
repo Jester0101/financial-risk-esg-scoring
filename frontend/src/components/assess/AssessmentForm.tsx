@@ -102,6 +102,14 @@ export function AssessmentForm({ onSubmit, onError, onLoading }: AssessmentFormP
         companyName: companyName.trim() || undefined,
       };
 
+      if (financialExtraction && financialExtraction.source === "extracted") {
+        if (financialExtraction.current_ratio != null) input.currentRatio = financialExtraction.current_ratio;
+        if (financialExtraction.debt_to_equity != null) input.debtToEquity = financialExtraction.debt_to_equity;
+        if (financialExtraction.return_on_equity != null) input.returnOnEquity = financialExtraction.return_on_equity;
+        if (financialExtraction.quick_ratio != null) input.quickRatio = financialExtraction.quick_ratio;
+        if (financialExtraction.ebitda_margin != null) input.ebitdaMargin = financialExtraction.ebitda_margin;
+      }
+
       let response: AssessmentResponse;
 
       if (esgFile) {
@@ -136,14 +144,13 @@ export function AssessmentForm({ onSubmit, onError, onLoading }: AssessmentFormP
     if (step === "financial") {
       return true;
     }
-    if (step === "esg") return true; // ESG is optional
+    if (step === "esg") return true;
     return true;
   };
 
   return (
     <Card className="p-8">
       <form onSubmit={handleSubmit} className="space-y-8">
-        {/* Company Name Field - Always visible */}
         <div>
           <Input
             label="Company Name (Optional)"
@@ -154,7 +161,6 @@ export function AssessmentForm({ onSubmit, onError, onLoading }: AssessmentFormP
           />
         </div>
 
-         {/* Progress Steps */}
          <div className="flex items-center justify-between mb-8">
            {[
              { key: "financial", label: "Financial" },
@@ -188,7 +194,6 @@ export function AssessmentForm({ onSubmit, onError, onLoading }: AssessmentFormP
            ))}
          </div>
 
-        {/* Step Content */}
         {step === "financial" && (
           <FinancialInputs
             x1={x1}
@@ -324,7 +329,6 @@ export function AssessmentForm({ onSubmit, onError, onLoading }: AssessmentFormP
                   </div>
                 )}
                 
-                {/* Option to also add ESG text even when file is uploaded */}
                 {esgFile && (
                   <div className="pt-4 border-t border-border">
                     <label className="block text-sm font-medium mb-2">
@@ -466,7 +470,7 @@ Examples:
 
              <div className="p-4 bg-accent/5 border border-accent/20 rounded-apple">
                <p className="text-sm text-foreground/80">
-                 <strong>Ready to calculate:</strong> Click "Calculate Risk" to generate the comprehensive 
+                 <strong>Ready to calculate:</strong> Click &quot;Calculate Risk&quot; to generate the comprehensive 
                  risk assessment. The analysis will include Altman Z-Score, Probability of Default, 
                  and ESG-adjusted risk score.
                </p>
@@ -474,7 +478,6 @@ Examples:
            </div>
          )}
 
-        {/* Navigation Buttons */}
         <div className="flex justify-between pt-6 border-t border-border">
            <Button
              type="button"

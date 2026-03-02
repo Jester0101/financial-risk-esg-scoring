@@ -9,11 +9,6 @@ interface RiskSummaryProps {
   result: RiskResult;
 }
 
-/**
- * Get risk grade based on Z-zone first, then probability.
- * Grade must NOT contradict Z-zone.
- * Z < 1.81 (Distress) → Never show green/low risk signals.
- */
 function getRiskGrade(probability: number, zScore: number, riskZone: string): {
   grade: string;
   color: string;
@@ -110,7 +105,6 @@ export function RiskSummary({ result }: RiskSummaryProps) {
 
   return (
     <Card className="p-8" variant="elevated">
-      {/* Primary KPI: Probability of Default */}
       <div className="flex items-start justify-between mb-8">
         <div className="flex-1">
           <p className="text-sm text-foreground/60 mb-2">Probability of Default</p>
@@ -126,7 +120,6 @@ export function RiskSummary({ result }: RiskSummaryProps) {
         </div>
       </div>
 
-      {/* Risk Grade */}
       <div className="mb-6">
         <div className="inline-flex items-center gap-3 px-4 py-2 bg-muted/50 rounded-full">
           <span className="text-2xl font-bold text-foreground">Grade {riskInfo.grade}</span>
@@ -134,7 +127,6 @@ export function RiskSummary({ result }: RiskSummaryProps) {
         </div>
       </div>
 
-      {/* Risk Scale */}
       <div className="pt-6 border-t border-border">
         <div className="flex items-center justify-between text-xs text-foreground/60 mb-3">
           <span>Low Risk</span>

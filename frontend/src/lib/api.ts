@@ -24,7 +24,7 @@ export interface RiskResult {
   compositeScore: number;
   timestamp: string;
   pBaseline?: number;
-  pAdjusted?: number;  // PD after extended financial (before ESG)
+  pAdjusted?: number;
   pEnhanced?: number;
   esgMethodVersion?: string;
   esgTopTerms?: string;
@@ -86,7 +86,7 @@ export async function calculateRiskWithDocument(
   input: RiskInput,
   file?: File,
   esgText?: string,
-  useOpenai: boolean = true,  // GPT-4o enabled by default
+  useOpenai: boolean = true,
   useExtractedFinancial: boolean = false
 ): Promise<AssessmentResponse> {
   const formData = new FormData();
@@ -181,9 +181,6 @@ export interface FinancialExtractionResponse {
   extraction_details: Record<string, any>;
 }
 
-/**
- * Score ESG from text directly (ESG service endpoint)
- */
 export async function scoreEsgText(
   text: string,
   useOpenai: boolean = true
@@ -207,9 +204,6 @@ export async function scoreEsgText(
   return response.json();
 }
 
-/**
- * Score ESG from document directly (ESG service endpoint)
- */
 export async function scoreEsgDocument(
   file: File,
   useOpenai: boolean = true
@@ -259,9 +253,6 @@ export interface EsgDocumentScoreResponse {
   };
 }
 
-/**
- * Extract financial data from document (ESG service endpoint)
- */
 export async function extractFinancialData(
   file: File
 ): Promise<FinancialExtractionResponse> {

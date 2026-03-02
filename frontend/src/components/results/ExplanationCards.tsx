@@ -20,7 +20,6 @@ export function ExplanationCards({ result }: ExplanationCardsProps) {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {/* Financial Analysis */}
       <Card className="p-6">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center">
@@ -44,7 +43,6 @@ export function ExplanationCards({ result }: ExplanationCardsProps) {
         </div>
       </Card>
 
-      {/* ESG Summary */}
       {result.esgScore && (
         <Card className="p-6">
           <div className="flex items-center gap-3 mb-4">

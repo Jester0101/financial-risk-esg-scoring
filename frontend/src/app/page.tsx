@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/Button";
 export default function HomePage() {
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
+      
       <section className="max-w-7xl mx-auto px-6 py-20">
         <div className="text-center max-w-3xl mx-auto">
           <h1 className="text-5xl font-bold text-foreground mb-6 tracking-tight">
@@ -34,7 +34,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Features Grid */}
+      
       <section className="max-w-7xl mx-auto px-6 py-16">
         <div className="grid md:grid-cols-3 gap-6">
           <Card className="p-8 hover:shadow-apple-lg transition-shadow">
@@ -69,7 +69,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* How It Works */}
+      
       <section className="max-w-7xl mx-auto px-6 py-16">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4">How It Works</h2>

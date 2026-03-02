@@ -24,7 +24,7 @@ export function AssessmentSelector({ selectedIds, onToggle, onCompare }: Assessm
   const loadAssessments = async () => {
     try {
       setLoading(true);
-      const data = await getAllAssessments(50); // Get last 50 assessments
+      const data = await getAllAssessments(50);
       setAssessments(data);
     } catch (error) {
       console.error("Failed to load assessments:", error);
@@ -123,4 +123,8 @@ export function AssessmentSelector({ selectedIds, onToggle, onCompare }: Assessm
     </Card>
   );
 }
+
+
+
+
 

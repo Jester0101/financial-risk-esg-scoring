@@ -40,7 +40,6 @@ export function DataQuality({
       </div>
 
       <div className="space-y-3">
-        {/* Financial Data */}
         <div className="p-3 bg-muted/50 rounded-apple">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-3">
@@ -70,8 +69,7 @@ export function DataQuality({
               {financialExtracted ? "Auto" : financialQuality === "complete" ? "Manual" : "Incomplete"}
             </span>
           </div>
-          
-          {/* Show extracted additional ratios if available */}
+
           {financialExtracted && financialExtraction && (
             <div className="mt-3 pt-3 border-t border-border">
               <p className="text-xs font-medium text-foreground/70 mb-2">Extended Financial Ratios Extracted:</p>
@@ -125,7 +123,6 @@ export function DataQuality({
           )}
         </div>
 
-        {/* ESG Data */}
         <div className="flex items-center justify-between p-3 bg-muted/50 rounded-apple">
           <div className="flex items-center gap-3">
             {esgQuality === "high" ? (

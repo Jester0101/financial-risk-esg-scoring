@@ -41,7 +41,6 @@ export function EvidenceSection({
       </div>
 
       <div className="space-y-4">
-        {/* Document Stats */}
         <div className="p-4 bg-muted/50 rounded-apple">
           <p className="text-sm font-medium mb-2">Document Processed</p>
           <div className="space-y-1 text-sm text-foreground/70">
@@ -54,7 +53,6 @@ export function EvidenceSection({
           </div>
         </div>
 
-        {/* Document Sections */}
         {documentSections && Object.keys(documentSections).length > 0 && (
           <div>
             <p className="text-sm font-medium mb-3">ESG Sections Analyzed</p>
@@ -79,7 +77,6 @@ export function EvidenceSection({
           </div>
         )}
 
-        {/* Top Terms */}
         {esgTopTerms && (
           <div>
             <p className="text-sm font-medium mb-2">Key ESG Terms Found</p>
@@ -96,7 +93,6 @@ export function EvidenceSection({
           </div>
         )}
 
-        {/* Risk Flags */}
         {esgRiskFlags && (
           <div className="p-4 bg-danger/10 border border-danger/20 rounded-apple">
             <div className="flex items-start gap-2">

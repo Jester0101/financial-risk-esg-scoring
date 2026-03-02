@@ -87,3 +87,7 @@ export function CompanyList({ companies, onEdit, onDelete, onViewAssessments }: 
   );
 }
 
+
+
+
+

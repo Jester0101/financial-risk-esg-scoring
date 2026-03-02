@@ -37,7 +37,6 @@ export function ComparisonView({ assessments }: ComparisonViewProps) {
 
   return (
     <div className="space-y-6">
-      {/* Summary Statistics */}
       <Card className="p-6">
         <h2 className="text-xl font-semibold mb-4">Comparison Summary</h2>
         <div className="grid grid-cols-3 gap-4">
@@ -65,7 +64,6 @@ export function ComparisonView({ assessments }: ComparisonViewProps) {
         </div>
       </Card>
 
-      {/* Detailed Comparison Table */}
       <Card className="p-6 overflow-x-auto">
         <h2 className="text-xl font-semibold mb-4">Detailed Comparison</h2>
         <table className="w-full">
@@ -138,7 +136,6 @@ export function ComparisonView({ assessments }: ComparisonViewProps) {
         </table>
       </Card>
 
-      {/* Key Metrics Comparison */}
       <div className="grid md:grid-cols-2 gap-6">
         <Card className="p-6">
           <h3 className="font-semibold mb-4">Financial Metrics</h3>
