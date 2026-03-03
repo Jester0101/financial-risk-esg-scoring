@@ -251,7 +251,7 @@ Return a JSON object with this EXACT structure (no additional text, no markdown,
     for attempt in range(max_retries):
         try:
             response = client.chat.completions.create(
-                model="gpt-4o", 
+                model="gpt-5.1", 
                 messages=[
                     {
                         "role": "system",

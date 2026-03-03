@@ -74,7 +74,7 @@ Based on the following risk assessment data, write a clear, professional, analys
     for attempt in range(max_retries):
         try:
             response = client.chat.completions.create(
-                model="gpt-4o",
+                model="gpt-5.1",
                 messages=[
                     {
                         "role": "system",

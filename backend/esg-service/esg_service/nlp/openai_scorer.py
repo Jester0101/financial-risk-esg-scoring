@@ -41,7 +41,7 @@ TEXT:
     for attempt in range(max_retries):
         try:
             response = client.chat.completions.create(
-                model="gpt-4.1",
+                model="gpt-5.1",
                 messages=[
                     {"role": "system", "content": system_msg},
                     {"role": "user", "content": prompt},
