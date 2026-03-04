@@ -18,5 +18,5 @@ EXPOSE 8080
 ENV JAVA_OPTS=""
 
 
-CMD ["sh", "-c", "java $JAVA_OPTS -Dspring.data.mongodb.uri=\"$SPRING_DATA_MONGODB_URI\" -jar app.jar"]
+CMD ["sh", "-c", "java $JAVA_OPTS \"-Dspring.data.mongodb.uri=$SPRING_DATA_MONGODB_URI\" -jar app.jar"]
 
