@@ -12,11 +12,12 @@ FROM eclipse-temurin:17-jre
 WORKDIR /app
 
 COPY --from=build /app/target/risk-scoring-0.0.1-SNAPSHOT.jar app.jar
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
 
 EXPOSE 8080
 
 ENV JAVA_OPTS=""
 
-
-CMD ["sh", "-c", "java $JAVA_OPTS \"-Dspring.data.mongodb.uri=$SPRING_DATA_MONGODB_URI\" -jar app.jar"]
+ENTRYPOINT ["/app/entrypoint.sh"]
 
